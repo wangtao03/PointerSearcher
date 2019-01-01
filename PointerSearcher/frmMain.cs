@@ -119,6 +119,12 @@ namespace PointerSearcher
             }
 
             tvwPointers.Nodes.Clear();
+
+            //锁定数据输入界面防止出错
+            progressBar1.Visible = true;
+            grpDump.Enabled = false;
+            grpOtheOption.Enabled = false;
+
             memdump1 = new Searcher(txtMemDump1.Text, memory_start);
             memdump2 = new Searcher(txtMemDump2.Text, memory_start);
 
@@ -127,6 +133,12 @@ namespace PointerSearcher
 
             var pointers = memdump1.FindPointers(address, max_offset);
             AddPointerTree(pointers, tvwPointers.SelectedNode);
+
+            //解锁数据输入界面
+            progressBar1.Visible = false;
+            grpDump.Enabled = true;
+            grpOtheOption.Enabled = true;
+
         }
 
         private void TvwPointers_DoubleClick(object sender, EventArgs e)

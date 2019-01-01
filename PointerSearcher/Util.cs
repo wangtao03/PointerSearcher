@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace PointerSearcher
 {
-    public partial class frmMain : Form
+    public partial class frmMain
     {
         public static string OpenFile(string defaultfile, string filter, string title)
         {
@@ -162,9 +162,14 @@ namespace PointerSearcher
             //用来记录匹配成功的次数
             var hit = 0;
             var hitMax = 0;
+
+            progressBar1.Value = progressBar1.Minimum = 0;
+            progressBar1.Maximum = pointers.Count;
+
             //枚举指针
             for (int l = 0; l < pointers.Count; l++)
             {
+                Application.DoEvents();
                 hit = 0;
                 if (memdump2 != null)
                 {
@@ -229,6 +234,7 @@ namespace PointerSearcher
                         }
                     }
                 }
+                progressBar1.Value = l;
             }
         }
 
@@ -326,7 +332,6 @@ namespace PointerSearcher
         private string GetPsvCheatPointerCode(List<Pointer> pointers, int bittype)
         {
             var key = 3;
-            var text = string.Empty;
             var endText = string.Empty;
 
             switch (cmbPsvCheatCodeType.SelectedIndex)
@@ -339,7 +344,7 @@ namespace PointerSearcher
 
                 case 1:
                     key = 8;
-                    endText = "$8800 00000000 00000000\n ...\n$8900 00000000 00000000";
+                    endText = "$8800 00000000 00000000\n{0}$8900 00000000 00000000";
                     break;
 
                 case 2:
@@ -348,24 +353,26 @@ namespace PointerSearcher
                     break;
             }
             var builder = new System.Text.StringBuilder();
-            builder.Append(text);
+
             for (int i = 0; i < pointers.Count - 1; i++)
             {
                 builder.Append(string.Format("{0}{1:X08} {2:X08}\n", new object[] {
                     this.chkRAWCode.Checked ? "" : $"${key}{bittype}00 ",
                     0,
-                    pointers[i + 1].Offset }));
+                    pointers[i + 1].Negative? 0x100000000UL-pointers[i + 1].Offset:pointers[i + 1].Offset
+                     }));
             }
-            text = builder.ToString();
+            var codeBody = builder.ToString();
 
-            text = string.Format("{0}{1:X08} {2:X08}\n", new object[] {
+            var codeHead = string.Format("{0}{1:X08} {2:X08}\n", new object[] {
                 this.chkRAWCode.Checked ? "" : $"${key}{bittype}{pointers.Count:X02} ",
                 pointers[0].Address,
-                pointers[0].Offset
-            }) + text;
+                pointers[0].Negative? 0x100000000UL - pointers[0].Offset : pointers[0].Offset
+            });
 
-            text += endText;
-            return (this.chkRAWCode.Checked ? "" : "_V0 Generated Code\n") + text;
+            var code = codeHead + codeBody;
+            code += string.Format(endText, code.Replace($"$8{bittype}", $"$8{bittype + 4}"));
+            return (this.chkRAWCode.Checked ? "" : "_V0 Generated Code\n") + code;
         }
     }
 }

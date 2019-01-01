@@ -75,6 +75,7 @@
             this.cmbPsvCheatCodeType = new System.Windows.Forms.ComboBox();
             this.rdoCpdeTypePsvCheat = new System.Windows.Forms.RadioButton();
             this.txtCode = new System.Windows.Forms.TextBox();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             ((System.ComponentModel.ISupportInitialize)(this.splMain)).BeginInit();
             this.splMain.Panel1.SuspendLayout();
             this.splMain.Panel2.SuspendLayout();
@@ -240,7 +241,7 @@
             // txtAddress3
             // 
             this.txtAddress3.Enabled = false;
-            this.txtAddress3.ForeColor = System.Drawing.Color.Red;
+            this.txtAddress3.ForeColor = System.Drawing.Color.Blue;
             this.txtAddress3.Location = new System.Drawing.Point(97, 136);
             this.txtAddress3.MaxLength = 10;
             this.txtAddress3.Name = "txtAddress3";
@@ -625,6 +626,7 @@
             // 
             // splMain_Data_Code.Panel2
             // 
+            this.splMain_Data_Code.Panel2.Controls.Add(this.progressBar1);
             this.splMain_Data_Code.Panel2.Controls.Add(this.txtCode);
             this.splMain_Data_Code.Panel2MinSize = 100;
             this.splMain_Data_Code.Size = new System.Drawing.Size(482, 244);
@@ -689,6 +691,15 @@
             this.txtCode.ReadOnly = true;
             this.txtCode.Size = new System.Drawing.Size(480, 211);
             this.txtCode.TabIndex = 0;
+            // 
+            // progressBar1
+            // 
+            this.progressBar1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.progressBar1.Location = new System.Drawing.Point(0, 0);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(480, 23);
+            this.progressBar1.TabIndex = 1;
+            this.progressBar1.Visible = false;
             // 
             // frmMain
             // 
@@ -773,6 +784,7 @@
         private System.Windows.Forms.TextBox txtAddress4;
         private System.Windows.Forms.CheckBox chkMemDump4;
         private System.Windows.Forms.Label labMemDump4;
+        private System.Windows.Forms.ProgressBar progressBar1;
     }
 }
 
